@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -11,10 +13,9 @@ class UserCreate(UserBase):
 
 
 class UserUpdate(BaseModel):
-    name: str
-    username: str
-    current_password: str = Field(..., min_length=8)
-    new_password: str = Field(None, min_length=8)
+    name: Optional[str] = None
+    username: Optional[str] = None
+    current_password: Optional[str] = None
 
 
 class UserResponse(UserBase):

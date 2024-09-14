@@ -1,22 +1,45 @@
+from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from crud import user as crud_user
-from schemas.user import UserCreate, User
-from app.core.database import get_db
+
+from app.core.database import SessionLocal
+from app.crud import user as crud_user
+from app.schemas.user_schema import UserCreate, UserResponse, UserUpdate
 
 router = APIRouter()
 
-@router.post("/users/", response_model=User)
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+@router.get("/users", response_model=List[UserResponse])
+def get_users(db: Session = Depends(get_db)):
+    users = crud_user.get_all_users(db)
+    return users
+
+
+@router.get("/users/{user_id}", response_model=UserResponse)
+def read_user(user_id: int, db: Session = Depends(get_db)):
+    user = crud_user.get_user(db=db, user_id=user_id)
+    if user is None:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+    return user
+
+
+@router.post("/users/", response_model=UserResponse)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return crud_user.create_user(db=db, user=user)
 
-@router.get("/users/", response_model=list[User])
-def read_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    return crud_user.get_users(db=db, skip=skip, limit=limit)
 
-@router.get("/users/{user_id}", response_model=User)
-def read_user(user_id: int, db: Session = Depends(get_db)):
+@router.patch("/users/{user_id}", response_model=UserResponse)
+def update_user(user_id: int, user: UserUpdate, db: Session = Depends(get_db)):
     db_user = crud_user.get_user(db=db, user_id=user_id)
-    if db_user is None:
+    if not db_user:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
-    return db_user
+    return crud_user.update_user(db=db, user_id=user_id, user=user)
