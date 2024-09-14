@@ -15,9 +15,9 @@ class User(Base):
 class Task(Base):
     __tablename__ = "tasks"
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
+    title = Column(String, index=True, nullable=False)
     description = Column(String)
-    status = Column(String)
+    status = Column(String, default="backlog")
     created_by = Column(Integer, ForeignKey("users.id"))
     responsible = Column(Integer, ForeignKey("users.id"))
 
