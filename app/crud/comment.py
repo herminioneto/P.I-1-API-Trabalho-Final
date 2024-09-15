@@ -16,6 +16,7 @@ def create_comment(db: Session, comment: CommentCreate):
     db_comment = CommentModel(
         content=comment.content,
         id_user=comment.id_user,
+        id_task=comment.id_task,
     )
     db.add(db_comment)
     db.commit()

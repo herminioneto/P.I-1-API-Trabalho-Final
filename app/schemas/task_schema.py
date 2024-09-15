@@ -1,7 +1,8 @@
-from typing import Literal, Optional
+from typing import List, Literal, Optional
 
 from pydantic import BaseModel
 
+from app.schemas.comment_schema import CommentResponse
 from app.schemas.user_schema import UserResponse
 
 
@@ -27,6 +28,7 @@ class TaskResponse(TaskBase):
     id: int
     creator: UserResponse
     assigned_user: Optional[UserResponse]
+    comments: List[CommentResponse] = []
 
     class Config:
         orm_mode = True

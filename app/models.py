@@ -23,6 +23,9 @@ class Task(Base):
 
     creator = relationship("User", foreign_keys=[created_by])
     assigned_user = relationship("User", foreign_keys=[responsible])
+    comments = relationship(
+        "Comment", back_populates="task", cascade="all, delete-orphan"
+    )
 
 
 class Comment(Base):
@@ -30,5 +33,7 @@ class Comment(Base):
     id = Column(Integer, primary_key=True, index=True)
     content = Column(String)
     id_user = Column(Integer, ForeignKey("users.id"))
+    id_task = Column(Integer, ForeignKey("tasks.id", ondelete="CASCADE"))
 
     creator = relationship("User", foreign_keys=[id_user])
+    task = relationship("Task", back_populates="comments")

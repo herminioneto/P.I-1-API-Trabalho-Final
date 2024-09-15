@@ -9,6 +9,7 @@ class CommentBase(BaseModel):
 
 class CommentCreate(CommentBase):
     id_user: int
+    id_task: int
 
 
 class CommentUpdate(BaseModel):
@@ -18,6 +19,7 @@ class CommentUpdate(BaseModel):
 class CommentResponse(CommentBase):
     id: int
     creator: UserResponse
+    id_task: int
 
     class Config:
         orm_mode = True
