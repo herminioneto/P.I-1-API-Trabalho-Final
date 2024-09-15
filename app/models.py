@@ -30,3 +30,5 @@ class Comment(Base):
     id = Column(Integer, primary_key=True, index=True)
     content = Column(String)
     id_user = Column(Integer, ForeignKey("users.id"))
+
+    creator = relationship("User", foreign_keys=[id_user])
