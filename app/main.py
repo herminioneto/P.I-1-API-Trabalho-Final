@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.routers import comment as comment_router
 from app.routers import task as task_router
 from app.routers import user as user_router
 
@@ -16,6 +17,7 @@ app.add_middleware(
 
 app.include_router(user_router.router, prefix="/api", tags=["users"])
 app.include_router(task_router.router, prefix="/api", tags=["tasks"])
+app.include_router(comment_router.router, prefix="/api", tags=["comments"])
 
 
 @app.get("/")

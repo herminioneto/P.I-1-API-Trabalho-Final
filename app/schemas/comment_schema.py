@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from schemas.user_schema import UserResponse
+
+from app.schemas.user_schema import UserResponse
 
 
 class CommentBase(BaseModel):
@@ -16,8 +17,7 @@ class CommentUpdate(BaseModel):
 
 class CommentResponse(CommentBase):
     id: int
-    id_user: int
-    user: UserResponse
+    creator: UserResponse
 
     class Config:
         orm_mode = True
