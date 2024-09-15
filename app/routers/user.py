@@ -43,3 +43,11 @@ def update_user(user_id: int, user: UserUpdate, db: Session = Depends(get_db)):
     if not db_user:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
     return crud_user.update_user(db=db, user_id=user_id, user=user)
+
+
+@router.delete("/users/{user_id}")
+def delete_comment(user_id: int, db: Session = Depends(get_db)):
+    result = crud_user.delete_user(db=db, user_id=user_id)
+    if result["detail"] == "Usuário não encontrado":
+        raise HTTPException(status_code=404, detail="Usuário não encotrado")
+    return result
