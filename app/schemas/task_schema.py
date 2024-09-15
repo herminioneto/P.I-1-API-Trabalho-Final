@@ -1,7 +1,8 @@
 from typing import Literal, Optional
 
 from pydantic import BaseModel
-from schemas.user_schema import UserResponse
+
+from app.schemas.user_schema import UserResponse
 
 
 class TaskBase(BaseModel):
@@ -12,13 +13,20 @@ class TaskBase(BaseModel):
 
 class TaskCreate(TaskBase):
     created_by: int
-    responsible: int
+    responsible: Optional[int] = None
+
+
+class TaskUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    status: Optional[Literal["backlog", "doing", "done"]] = None
+    responsible: Optional[int] = None
 
 
 class TaskResponse(TaskBase):
     id: int
     creator: UserResponse
-    assigned_user: UserResponse
+    assigned_user: Optional[UserResponse]
 
     class Config:
         orm_mode = True
