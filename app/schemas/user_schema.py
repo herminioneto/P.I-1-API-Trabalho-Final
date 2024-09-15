@@ -15,7 +15,6 @@ class UserCreate(UserBase):
 class UserUpdate(BaseModel):
     name: Optional[str] = None
     username: Optional[str] = None
-    current_password: Optional[str] = None
 
 
 class UserResponse(UserBase):
