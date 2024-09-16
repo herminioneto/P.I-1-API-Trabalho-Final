@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
 from app.routers import comment as comment_router
 from app.routers import task as task_router
@@ -22,4 +23,4 @@ app.include_router(comment_router.router, prefix="/api", tags=["comments"])
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello World"}
+    return RedirectResponse(url="/docs")
