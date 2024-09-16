@@ -1,5 +1,6 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 
 from app.core.database import Base
 
@@ -10,6 +11,7 @@ class User(Base):
     name = Column(String)
     username = Column(String, unique=True, index=True)
     password = Column(String)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
 class Task(Base):
@@ -20,6 +22,7 @@ class Task(Base):
     status = Column(String, default="backlog")
     created_by = Column(Integer, ForeignKey("users.id"))
     responsible = Column(Integer, ForeignKey("users.id"))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     creator = relationship("User", foreign_keys=[created_by])
     assigned_user = relationship("User", foreign_keys=[responsible])
@@ -34,6 +37,7 @@ class Comment(Base):
     content = Column(String)
     id_user = Column(Integer, ForeignKey("users.id"))
     id_task = Column(Integer, ForeignKey("tasks.id", ondelete="CASCADE"))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     creator = relationship("User", foreign_keys=[id_user])
     task = relationship("Task", back_populates="comments")

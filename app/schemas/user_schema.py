@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel, Field
@@ -19,6 +20,7 @@ class UserUpdate(BaseModel):
 
 class UserResponse(UserBase):
     id: int
+    created_at: datetime
 
     class Config:
         orm_mode = True

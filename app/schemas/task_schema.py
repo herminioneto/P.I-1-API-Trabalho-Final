@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Literal, Optional
 
 from pydantic import BaseModel
@@ -26,6 +27,7 @@ class TaskUpdate(BaseModel):
 
 class TaskResponse(TaskBase):
     id: int
+    created_at: datetime
     creator: UserResponse
     assigned_user: Optional[UserResponse]
     comments: List[CommentResponse] = []
