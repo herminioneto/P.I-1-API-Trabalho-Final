@@ -9,8 +9,26 @@ def get_task(db: Session, task_id: int):
     return db.query(TaskModel).filter(TaskModel.id == task_id).first()
 
 
-def get_tasks(db: Session, skip: int = 0, limit: int = 10):
+def get_tasks(db: Session):
     return db.query(TaskModel).all()
+
+
+def get_filtered_tasks(
+    db: Session,
+    created_by: int = None,
+    responsible: int = None,
+    status: str = None,
+):
+    query = db.query(TaskModel)
+
+    if created_by is not None:
+        query = query.filter(TaskModel.created_by == created_by)
+    if responsible is not None:
+        query = query.filter(TaskModel.responsible == responsible)
+    if status is not None:
+        query = query.filter(TaskModel.status == status)
+
+    return query.all()
 
 
 def create_task(db: Session, task: TaskCreate):

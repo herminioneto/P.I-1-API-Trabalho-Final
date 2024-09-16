@@ -1,3 +1,5 @@
+from typing import List, Optional
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -16,17 +18,25 @@ def get_db():
         db.close()
 
 
-@router.get("/tasks/", response_model=list[TaskResponse])
-def read_tasks(db: Session = Depends(get_db)):
-    return crud_task.get_tasks(db=db)
-
-
 @router.get("/tasks/{task_id}", response_model=TaskResponse)
 def read_task(task_id: int, db: Session = Depends(get_db)):
     db_task = crud_task.get_task(db=db, task_id=task_id)
     if not db_task:
         raise HTTPException(status_code=404, detail="Tarefa não encontrada")
     return db_task
+
+
+@router.get("/tasks/", response_model=List[TaskResponse])
+def read_filtered_or_all_tasks(
+    created_by: Optional[int] = None,
+    responsible: Optional[int] = None,
+    status: Optional[str] = None,
+    db: Session = Depends(get_db),
+):
+    tasks = crud_task.get_filtered_tasks(
+        db=db, created_by=created_by, responsible=responsible, status=status
+    )
+    return tasks
 
 
 @router.post("/tasks/", response_model=TaskResponse)
